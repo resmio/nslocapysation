@@ -3,6 +3,7 @@ __author__ = 'JanNash'
 import re
 import os
 import logging
+from nslocapysation import constants
 from nslocapysation.classes.localized_string import LocalizedString
 from nslocapysation.classes.translation import Translation
 
@@ -69,7 +70,6 @@ class LocalizableStringFile(object):
                     comment += '\n' + comment_match.group()
                 continue
             elif translation_match is not None:
-                translation = translation_match.group(0, 1)
                 num_of_translations += 1
 
                 if comment is not None:
@@ -78,12 +78,14 @@ class LocalizableStringFile(object):
                                   ''.format(comment=comment))
 
                 logging.debug('Found translation: {translation}'
-                              ''.format(translation=translation))
+                              ''.format(translation=translation_match.group()))
+
+                key = translation_match.group(constants.KEY_KEY)
+                translation = translation_match.group(constants.TRANSLATION_KEY)
                 result.add(Translation(language_code=self.language_code,
                                        comment=comment,
-                                       key=translation[0],
-                                       translation=translation[1]))
-                translation = None
+                                       key=key,
+                                       translation=translation))
                 comment = None
 
         logging.info('Found {num} comments.'

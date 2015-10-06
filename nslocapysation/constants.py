@@ -1,9 +1,11 @@
 __author__ = 'JanNash'
 
-# dictionary keys
-M_FILE_PATHS_KEY = 'm_file_paths'
-LPROJ_DIR_PATHS_KEY = 'lproj_file_paths'
+# keys
+M_FILE_PATHS_KEY = r'm_file_paths'
+LPROJ_DIR_PATHS_KEY = r'lproj_file_paths'
+KEY_KEY = r'key'
+TRANSLATION_KEY = r'translation'
 
 
 # file names
-LOCALIZABLE_STRINGS_FILE_NAME = 'Localizable.strings'
+LOCALIZABLE_STRINGS_FILE_NAME = r'Localizable.strings'
