@@ -12,6 +12,7 @@ class LocalizedString(object):
                  macro=None,
                  key="",
                  comment=None,
+                 translations=None,
                  full_sourcefile_path="",
                  sourcefile_line_number=None,
                  line_occurrence_index=None):
