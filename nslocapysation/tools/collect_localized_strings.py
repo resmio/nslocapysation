@@ -71,6 +71,8 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                     occurrence_counts[macro] += len(matches)
 
                 for occurrence_index, match in enumerate(matches):
+                    occurrence_number = occurrence_index + 1
+
                     if macro.has_comment:
                         key, comment = match
                     else:
@@ -79,13 +81,13 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
                     if not is_literal_NSString(key):
                         logging.warning('Attention, there seems to be a dynamic usage of {macro} in file {file_}, '
-                                        'line {line_number}, occurrence {occurrence_index}!\n'
+                                        'line {line_number}, occurrence number {occurrence_number}!\n'
                                         'Please check that every possible value of the supplied variable '
                                         '"{variable}" has sufficient localizations!'
                                         ''.format(macro=macro,
                                                   file_=file_,
                                                   line_number=line_number,
-                                                  occurrence_index=occurrence_index,
+                                                  occurrence_number=occurrence_number,
                                                   variable=key))
 
                         localizedString = DynamicLocalizedString(macro=macro,
@@ -93,14 +95,14 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                                                                  comment=comment,
                                                                  full_sourcefile_path=file_path,
                                                                  sourcefile_line_number=line_number,
-                                                                 line_occurrence_index=occurrence_index)
+                                                                 line_occurrence_number=occurrence_number)
                     else:
                         localizedString = LocalizedString(macro=macro,
                                                           key=key,
                                                           comment=comment,
                                                           full_sourcefile_path=file_path,
                                                           sourcefile_line_number=line_number,
-                                                          line_occurrence_index=occurrence_index)
+                                                          line_occurrence_number=occurrence_number)
 
                     result.add(localizedString)
 

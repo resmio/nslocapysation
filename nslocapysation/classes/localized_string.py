@@ -15,14 +15,14 @@ class LocalizedString(object):
                  translations=None,
                  full_sourcefile_path="",
                  sourcefile_line_number=None,
-                 line_occurrence_index=None):
+                 line_occurrence_number=None):
 
         self._macro = macro
         self._key = key
         self._comment = comment
         self._full_sourcefile_path = full_sourcefile_path
         self._sourcefile_line_number = sourcefile_line_number
-        self._line_occurrence_index = line_occurrence_index
+        self._line_occurrence_number = line_occurrence_number
 
     ### MAGIC ###
 
@@ -33,7 +33,7 @@ class LocalizedString(object):
                 "    comment:                   {comment}\n"
                 "    sourcefile_name:           {sourcefile_name}\n"
                 "    sourcefile_line_number:    {sourcefile_line_number}\n"
-                "    line_occurrence_index:     {line_occurrence_index}\n"
+                "    line_occurrence_number:    {line_occurrence_number}\n"
                 "    full_sourcefile_path:      {full_sourcefile_path}\n"
                 "".format(class_name=self.__class__.__name__,
                           macro=self.macro,
@@ -41,7 +41,7 @@ class LocalizedString(object):
                           comment=self.comment,
                           sourcefile_name=self.sourcefile_name,
                           sourcefile_line_number=self.sourcefile_line_number,
-                          line_occurrence_index=self.line_occurrence_index,
+                          line_occurrence_number=self.line_occurrence_number,
                           full_sourcefile_path=self.full_sourcefile_path))
 
     def __eq__(self, other):
@@ -94,8 +94,8 @@ class LocalizedString(object):
         return self._sourcefile_line_number
 
     @property
-    def line_occurrence_index(self):
-        return self._line_occurrence_index
+    def line_occurrence_number(self):
+        return self._line_occurrence_number
 
     @property
     def full_sourcefile_path(self):

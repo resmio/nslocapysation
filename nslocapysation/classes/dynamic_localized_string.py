@@ -17,7 +17,7 @@ class DynamicLocalizedString(LocalizedString):
         return (self.key == other.key and
                 self.full_sourcefile_path == other.full_sourcefile_path and
                 self.sourcefile_line_number == other.sourcefile_line_number and
-                self.line_occurrence_index == other.line_occurrence_index)
+                self.line_occurrence_number == other.line_occurrence_number)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -25,5 +25,5 @@ class DynamicLocalizedString(LocalizedString):
     def __hash__(self):
         return (hash(self.key) ^
                 hash(self.sourcefile_line_number) ^
-                hash(self.line_occurrence_index) ^
+                hash(self.line_occurrence_number) ^
                 hash(self.full_sourcefile_path))
