@@ -1,7 +1,7 @@
 nslocapysation
 ============
 
-Replace the good ol' genstrings-command with an actually useful python-script
+Replace the good ol' genstrings-command with an actually useful python-script.
 
 Usage
 ---
