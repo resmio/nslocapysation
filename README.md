@@ -7,7 +7,7 @@ Usage
 ---
 
 ```sh
-$ python main.py -p path/to/the/source/root/directory/of/your/xcode/project
+$ python run.py -p path/to/the/source/root/directory/of/your/xcode/project
 ```
 
 Known Issues
