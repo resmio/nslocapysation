@@ -9,6 +9,7 @@ class LocalizableStringFile(object):
     """
     A class whose instances represent .lproj-localizable-string-files.
     """
+    ### CLASS CONSTANTS ###
 
     RE_COMMENT = re.compile(r'\/\/(.*)')
     RE_TRANSLATION = re.compile(r'\"(.*?)\"\s*\=\s*\"(.*?)\"\;')
@@ -19,7 +20,7 @@ class LocalizableStringFile(object):
         self._language_code = language_code
         self._file_path = file_path
 
-        self._localized_strings = None
+        self._translations = None
 
     ### PROPERTIES ###
 
@@ -33,9 +34,9 @@ class LocalizableStringFile(object):
 
     @property
     def translations(self):
-        if self._localized_strings is None:
+        if self._translations is None:
             self._create_translations()
-        return self._localized_strings
+        return self._translations
 
     ### PRIVATE METHODS ###
 
@@ -68,13 +69,15 @@ class LocalizableStringFile(object):
                 num_of_translations += 1
                 logging.debug('Found translation: {translation}'
                               ''.format(translation=translation))
-                # translation = Translation(language_code=self.language_code,
-                #                           comment=comment,
-                #                           key=translation[0],
-                #                           translation=translation[1])
+                # result.add(Translation(language_code=self.language_code,
+                #                        comment=comment,
+                #                        key=translation[0],
+                #                        translation=translation[1]))
+                translation = None
+                comment = None
 
 
-        self._localized_strings = result
+        self._translations = result
 
     ### PUBLIC METHODS ###
 

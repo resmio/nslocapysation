@@ -4,10 +4,10 @@ import os
 import logging
 from nslocapysation import constants
 from nslocapysation.utils.is_m_implementation_file import is_m_implementation_file
-from nslocapysation.utils.is_lproj_localization_file import is_lproj_localization_file
+from nslocapysation.utils.is_lproj_localization_directory import is_lproj_localization_directory
 
 
-def collect_m_and_lproj_file_paths(project_source_root_path):
+def collect_m_file_and_lproj_dir_paths(project_source_root_path):
     """
     Walks the given project_source_root_path and returns a dictionary containing:
         {'m_file_paths': [a list of paths to .m-implementation-files],
@@ -19,33 +19,35 @@ def collect_m_and_lproj_file_paths(project_source_root_path):
     :type: str
     :rtype: dict[str, list[str]]
     """
-    logging.info('Searching {project_source_root_path} for .m-implementation-files and .lproj-localization-files.')
+    logging.info('Searching {project_source_root_path} for .m-implementation-files '
+                 'and .lproj-localization-directories.'
+                 ''.format(project_source_root_path=project_source_root_path))
 
     result = {constants.M_FILE_PATHS_KEY: [],
-              constants.LPROJ_FILE_PATHS_KEY: []}
+              constants.LPROJ_DIR_PATHS_KEY: []}
 
     num_of_m_implementation_files = 0
-    num_of_lproj_localization_files = 0
+    num_of_lproj_localization_directories = 0
 
     for dir_path, subdir_names, files in os.walk(project_source_root_path):
+
+        if is_lproj_localization_directory(dir_path):
+            result[constants.LPROJ_DIR_PATHS_KEY].append(dir_path)
+            num_of_lproj_localization_directories += 1
+            logging.debug("Found localization-directory at path '{dir_path}'"
+                          "".format(dir_path=dir_path))
         for file_ in files:
             if is_m_implementation_file(file_):
-                file_path = os.path.join(dir_path, file_)
-                result[constants.M_FILE_PATHS_KEY].append(file_path)
+                d_path = os.path.join(dir_path, file_)
+                result[constants.M_FILE_PATHS_KEY].append(d_path)
                 num_of_m_implementation_files += 1
                 logging.debug("Found implementation-file '{file_}' at path '{dir_path}'"
                               "".format(file_=file_,
                                         dir_path=dir_path))
-            elif is_lproj_localization_file(file_):
-                file_path = os.path.join(dir_path, file_)
-                result[constants.LPROJ_FILE_PATHS_KEY].append(file_path)
-                num_of_lproj_localization_files += 1
-                logging.debug("Found localization-file '{file_}' at path '{dir_path}'"
-                              "".format(file_=file_,
-                                        dir_path=dir_path))
+
 
     logging.info('Found {num} implementation-files.'
                  ''.format(num=num_of_m_implementation_files))
-    logging.info('Found {num} localization-files.'
-                 ''.format(num=num_of_lproj_localization_files))
+    logging.info('Found {num} localization-directories.'
+                 ''.format(num=num_of_lproj_localization_directories))
     return result

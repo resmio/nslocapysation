@@ -40,23 +40,31 @@ def parse_args():
 def main(cmd_args):
     import logging
     from nslocapysation import constants
-    from nslocapysation.tools.collect_m_and_lproj_file_paths import collect_m_and_lproj_file_paths
-    from nslocapysation.tools.collect_localized_strings import collect_localized_strings
-    from nslocapysation.classes.ns_localized_string_macro import NSLocalizedStringMacro
+    from nslocapysation.tools.collect_m_file_and_lproj_dir_paths    import collect_m_file_and_lproj_dir_paths
+    from nslocapysation.tools.collect_localized_strings         import collect_localized_strings
+    from nslocapysation.tools.collect_localizations             import collect_localizations
+    from nslocapysation.classes.ns_localized_string_macro       import NSLocalizedStringMacro
+    from nslocapysation.classes.localizable_string_file         import LocalizableStringFile
 
     if cmd_args.debug:
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
 
-    file_path_dict = collect_m_and_lproj_file_paths(cmd_args.project_source_root_path)
+    file_path_dict = collect_m_file_and_lproj_dir_paths(cmd_args.project_source_root_path)
 
     implementation_file_paths = file_path_dict[constants.M_FILE_PATHS_KEY]
+
+    localization_file_paths = file_path_dict[constants.LPROJ_DIR_PATHS_KEY]
 
     custom_macros = [NSLocalizedStringMacro(format_=fmt) for fmt in cmd_args.custom_macros]
 
     localized_strings = collect_localized_strings(implementation_file_paths=implementation_file_paths,
                                                   custom_macros=custom_macros)
+
+    localizations = collect_localizations(localization_dir_paths=localization_file_paths)
+
+    print
 
 
 if __name__ == '__main__':

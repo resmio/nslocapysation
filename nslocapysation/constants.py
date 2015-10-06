@@ -1,8 +1,9 @@
 __author__ = 'JanNash'
 
-
+# dictionary keys
 M_FILE_PATHS_KEY = 'm_file_paths'
-LPROJ_FILE_PATHS_KEY = 'lproj_file_paths'
+LPROJ_DIR_PATHS_KEY = 'lproj_file_paths'
 
-KEY_FORMAT = r'key'
-COMMENT_FORMAT = r'comment'
+
+# file names
+LOCALIZABLE_STRINGS_FILE_NAME = 'Localizable.strings'

@@ -105,7 +105,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                     result.add(localizedString)
 
     for macro in macros:
-        logging.info('Found {num} occurrences of macro {macro} in total'
+        logging.info('Found {num} occurrences of macro {macro} in total.'
                       ''.format(num=occurrence_counts[macro],
                                 macro=macro))
 
