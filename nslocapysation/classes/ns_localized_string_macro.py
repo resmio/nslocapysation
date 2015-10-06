@@ -48,8 +48,8 @@ class NSLocalizedStringMacro(object):
     def getRegex(self):
         # Escape all metas
         escaped_format = re.escape(self.format_)
-        regex_string = escaped_format.replace(r'\@\"key\"', r'(.*?)')
+        regex_string = escaped_format.replace(r'\@\"key\"', r'(?P<key>.*?)')
 
         if self.has_comment:
-            regex_string = regex_string.replace(r'\@\"comment\"', r'(.*?)')
+            regex_string = regex_string.replace(r'\@\"comment\"', r'(?P<comment>.*?)')
         return re.compile(regex_string)

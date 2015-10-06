@@ -1,9 +1,11 @@
 __author__ = 'JanNash'
 
 import re
+import os
 import logging
 from nslocapysation.classes.localized_string import LocalizedString
 from nslocapysation.classes.translation import Translation
+
 
 class LocalizableStringFile(object):
     """
@@ -11,8 +13,8 @@ class LocalizableStringFile(object):
     """
     ### CLASS CONSTANTS ###
 
-    RE_COMMENT = re.compile(r'\/\/(.*)')
-    RE_TRANSLATION = re.compile(r'\"(.*?)\"\s*\=\s*\"(.*?)\"\;')
+    RE_COMMENT = re.compile(r'\/\/(?P<comment>.*)')
+    RE_TRANSLATION = re.compile(r'\"(?P<key>.*?)\"\s*\=\s*\"(?P<translation>.*?)\"\;')
 
     ### INITIALIZER ###
 
@@ -35,18 +37,18 @@ class LocalizableStringFile(object):
     @property
     def translations(self):
         if self._translations is None:
-            self._create_translations()
+            self._collect_translations()
         return self._translations
 
     ### PRIVATE METHODS ###
 
-    def _create_translations(self):
+    def _collect_translations(self):
         result = set()
 
-        logging.info('Creating localized strings for language_code {language_code}'
+        logging.info('Collecting Translations for language_code {language_code}'
                      ''.format(language_code=self.language_code))
-        logging.debug('Creating localized strings from file at path {path}'
-                      ''.format(self.file_path))
+        logging.debug('Collecting localized strings from file at path {file_path}'
+                      ''.format(file_path=os.path.abspath(self.file_path)))
 
         with open(self.file_path, mode='r') as file_:
             lines = file_.readlines()
@@ -55,27 +57,43 @@ class LocalizableStringFile(object):
         num_of_translations = 0
 
         comment = None
-        translation = None
         for line in lines:
-            if comment is None:
-                comment = self.RE_COMMENT.match(line)
-            if comment is not None:
-                num_of_comments += 1
-                logging.debug('Found comment: {comment}'
-                              ''.format(comment=comment))
+            comment_match = self.RE_COMMENT.match(line)
+            translation_match = self.RE_TRANSLATION.match(line)
+
+            if comment_match is not None:
+                # Supporting multi-line comments
+                if comment is None:
+                    comment = comment_match.group()
+                else:
+                    comment += '\n' + comment_match.group()
                 continue
-            translation = self.RE_TRANSLATION.match(line)
-            if translation is not None:
+            elif translation_match is not None:
+                translation = translation_match.group(0, 1)
                 num_of_translations += 1
+
+                if comment is not None:
+                    num_of_comments += 1
+                    logging.debug('Found comment: {comment}'
+                                  ''.format(comment=comment))
+
                 logging.debug('Found translation: {translation}'
                               ''.format(translation=translation))
-                # result.add(Translation(language_code=self.language_code,
-                #                        comment=comment,
-                #                        key=translation[0],
-                #                        translation=translation[1]))
+                result.add(Translation(language_code=self.language_code,
+                                       comment=comment,
+                                       key=translation[0],
+                                       translation=translation[1]))
                 translation = None
                 comment = None
 
+        logging.info('Found {num} comments.'
+                     ''.format(num=num_of_comments))
+        logging.debug('Comments: {comments}'
+                      ''.format(comments=[trans.comment for trans in result]))
+        logging.info('Found {num} translations.'
+                     ''.format(num=num_of_translations))
+        logging.debug('Translations: {translations}'
+                      ''.format(translations=[(trans.key, trans.translation) for trans in result]))
 
         self._translations = result
 

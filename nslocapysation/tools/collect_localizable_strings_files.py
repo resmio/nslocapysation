@@ -6,8 +6,7 @@ from nslocapysation.classes.localizable_string_file import LocalizableStringFile
 from nslocapysation.utils.get_language_code_from_file_path import get_language_code_from_file_path
 
 
-
-def collect_localizations(localization_dir_paths):
+def collect_localizable_strings_files(localization_dir_paths):
     """
     Collects all localizations from the given localization_dir_paths and
     returns a list containing all localization-files parsed to LocalizableStringFile-instances.

@@ -42,7 +42,7 @@ def main(cmd_args):
     from nslocapysation import constants
     from nslocapysation.tools.collect_m_file_and_lproj_dir_paths    import collect_m_file_and_lproj_dir_paths
     from nslocapysation.tools.collect_localized_strings         import collect_localized_strings
-    from nslocapysation.tools.collect_localizations             import collect_localizations
+    from nslocapysation.tools.collect_localizable_strings_files             import collect_localizable_strings_files
     from nslocapysation.classes.ns_localized_string_macro       import NSLocalizedStringMacro
     from nslocapysation.classes.localizable_string_file         import LocalizableStringFile
 
@@ -62,9 +62,10 @@ def main(cmd_args):
     localized_strings = collect_localized_strings(implementation_file_paths=implementation_file_paths,
                                                   custom_macros=custom_macros)
 
-    localizations = collect_localizations(localization_dir_paths=localization_file_paths)
+    localizable_strings_files = collect_localizable_strings_files(localization_dir_paths=localization_file_paths)
 
-    print
+    for localizable_strings_file in localizable_strings_files:
+        a = localizable_strings_file.translations
 
 
 if __name__ == '__main__':
