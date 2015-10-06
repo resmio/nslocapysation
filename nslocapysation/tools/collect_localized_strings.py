@@ -25,7 +25,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
     :type implementation_file_paths: list[str]
     :type custom_macros: list[NSLocalizedStringMacro]
-    :rtype: set
+    :rtype: set[LocalizedString]
     """
     result = set()
 
@@ -82,7 +82,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                     if not is_literal_NSString(key):
                         logging.warning('Attention, there seems to be a dynamic usage of {macro} in file {file_}, '
                                         'line {line_number}, occurrence number {occurrence_number}!\n'
-                                        'Please check that every possible value of the supplied variable '
+                                        'Please check manually that every possible value of the supplied variable '
                                         '"{variable}" has sufficient localizations!'
                                         ''.format(macro=macro,
                                                   file_=file_,

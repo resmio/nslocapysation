@@ -16,12 +16,12 @@ def collect_localizable_strings_files(localization_dir_paths):
     :returns: A list of LocalizableStringFile-instances..
 
     :type localization_dir_paths: list[str]
-    :rtype: list[LocalizableStringFile]
+    :rtype: set[LocalizableStringFile]
     """
-    result = []
+    result = set()
     for dir_path in localization_dir_paths:
         strings_file_path = os.path.join(dir_path, constants.LOCALIZABLE_STRINGS_FILE_NAME)
         language_code = get_language_code_from_file_path(strings_file_path)
-        result.append(LocalizableStringFile(language_code=language_code,
-                                            file_path=strings_file_path))
+        result.add(LocalizableStringFile(language_code=language_code,
+                                         file_path=strings_file_path))
     return result
