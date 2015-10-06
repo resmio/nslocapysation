@@ -77,6 +77,13 @@ class LocalizedString(object):
     def comment(self):
         return self._comment
 
+    @comment.setter
+    def comment(self, new_comment):
+        if new_comment == 'nil':
+            self._comment = None
+        else:
+            self._comment = new_comment
+
     @property
     def sourcefile_name(self):
         return os.path.basename(self.full_sourcefile_path)
