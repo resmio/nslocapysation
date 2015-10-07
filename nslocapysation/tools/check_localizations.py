@@ -9,9 +9,9 @@ def check_localizations(localizable_strings_files, localized_strings, update=Fal
     This function checks for each localized-string if it has a translation in every language.
     If a translation is missing, it logs a warning.
     If update is set to True, it also adds an empty translation, which will look like this:
-        "key" =
-    This will then lead to a compile error, so you only might want to set update when you build
-    a release version of the App, so you don't accidentally release an App with missing localizations.
+        '"key" ='
+    This will lead to a compile error in Xcode, so you might want to set update when you build a release version
+    of your App, which will prevent you from accidentally releasing an App with missing localizations.
 
     :param localizable_strings_files: A set containing all LocalizableStringFile-instances against which the
                                      given localized_strings should be checked.
@@ -24,6 +24,7 @@ def check_localizations(localizable_strings_files, localized_strings, update=Fal
     :type localizable_strings_files: set[LocalizableStringFile]
     :type localized_strings: set[LocalizedString]
     """
+    if update:
 
 
     pass

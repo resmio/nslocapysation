@@ -49,7 +49,7 @@ def main(cmd_args):
     from nslocapysation.tools.collect_m_file_and_lproj_dir_paths    import collect_m_file_and_lproj_dir_paths
     from nslocapysation.tools.collect_localized_strings             import collect_localized_strings
     from nslocapysation.tools.collect_localizable_strings_files     import collect_localizable_strings_files
-    from nslocapysation.tools.check_localizations                   import check_localizations
+    # from nslocapysation.tools.check_localizations                   import check_localizations
     from nslocapysation.classes.ns_localized_string_macro           import NSLocalizedStringMacro
 
     if cmd_args.debug:
@@ -70,9 +70,9 @@ def main(cmd_args):
 
     localizable_strings_files = collect_localizable_strings_files(localization_dir_paths=localization_file_paths)
 
-    check_localizations(localizable_strings_files=localizable_strings_files,
-                        localized_strings=localized_strings,
-                        update=cmd_args.update)
+    # check_localizations(localizable_strings_files=localizable_strings_files,
+    #                     localized_strings=localized_strings,
+    #                     update=cmd_args.update)
 
 
 if __name__ == '__main__':

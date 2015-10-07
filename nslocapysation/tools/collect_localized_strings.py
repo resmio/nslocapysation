@@ -27,6 +27,10 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
     :type custom_macros: list[NSLocalizedStringMacro]
     :rtype: set[LocalizedString]
     """
+
+    def n_(num, strng):
+        return strng if num == 1 else strng + 's'
+
     result = set()
 
     macros = [DEFAULT_MACRO] + list(custom_macros)
@@ -38,6 +42,8 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
     for file_path in implementation_file_paths:
 
+        occurrences_in_file = 0
+
         with open(file_path, mode='r') as implementation_file:
             lines = implementation_file.readlines()
 
@@ -48,27 +54,20 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
         for line_index, line in enumerate(lines):
             line_number = line_index + 1
 
-            logging.debug('Reading line {line}'
-                          ''.format(line=line.strip('\n')))
-
             for macro in macros:
-                logging.debug('Searching for occurrences of macro {macro_format}'
-                              ''.format(macro_format=macro.format_))
-
                 matches = re.findall(macro.getRegex(), line)
 
                 if not matches:
-                    logging.debug('No matches for macro {macro} in line {line_number}'
-                                  ''.format(macro=macro,
-                                            line_number=line_number))
                     continue
                 else:
                     num_of_matches = len(matches)
-                    logging.debug('Found {num_of_matches} occurrence of macro {macro} in line {line_number}'
+                    logging.debug('Found {num_of_matches} {n_occurrence} of macro {macro} in line {line_number}'
                                   ''.format(num_of_matches=num_of_matches,
+                                            n_occurrence=n_(num_of_matches, 'occurrence'),
                                             macro=macro,
                                             line_number=line_number))
-                    occurrence_counts[macro] += len(matches)
+                    occurrence_counts[macro] += num_of_matches
+                    occurrences_in_file += num_of_matches
 
                 for occurrence_index, match in enumerate(matches):
                     occurrence_number = occurrence_index + 1
@@ -106,12 +105,22 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
                     result.add(localizedString)
 
+        for macro in macros:
+            logging.debug('Found {num} {n_occurrence} of macro {macro} in file {file_}'
+                          ''.format(num=occurrences_in_file,
+                                    n_occurrence=n_(occurrences_in_file, 'occurrence'),
+                                    macro=macro,
+                                    file_=file_))
+
     for macro in macros:
-        logging.info('Found {num} occurrences of macro {macro} in total.'
-                      ''.format(num=occurrence_counts[macro],
+        num = occurrence_counts[macro]
+        logging.info('Found {num} {n_occurrence} of macro {macro} in total.'
+                      ''.format(num=num,
+                                n_occurrence=n_(num, 'occurrence'),
                                 macro=macro))
 
-    logging.info('Found {num} distinct localizable strings in total.'
-                 ''.format(num=len(result)))
+    logging.info('Found {num} distinct localizable {n_string} in total.'
+                 ''.format(num=len(result),
+                           n_string=n_(len(result), 'string')))
 
     return result
