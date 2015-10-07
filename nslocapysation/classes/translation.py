@@ -71,4 +71,3 @@ class Translation(object):
     @property
     def translation(self):
         return self._translation
-
