@@ -24,7 +24,7 @@ $ python run.py [-ud] [-p project_source_root_path] [-i language_codes_to_ignore
 you might want to ignore 'en'.
 - -c Custom macros that you are using in your source-code. They must contain the word 'key' as a placeholder for where the actual key that will be translated is positioned. (No worries, if there's no 'key' in there, it will raise a ValueError)
 
-Known Issues / Improvemet Ideas
+Known Issues / Improvement Ideas
 ---
 - A line comment is always associated with the next following translation, not with a whole group.
   Since the translations are sorted by number of words and by alphabet, this can lead to a comment that was
