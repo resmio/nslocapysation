@@ -6,8 +6,9 @@ import shutil
 import datetime
 import logging
 from nslocapysation import constants
-from nslocapysation.classes.translation import Translation
-from nslocapysation.classes.incomplete_translation import IncompleteTranslation
+from nslocapysation.utils.num_of_words_in_string    import num_of_words_in_string
+from nslocapysation.classes.translation             import Translation
+from nslocapysation.classes.incomplete_translation  import IncompleteTranslation
 
 
 class TranslationFile(object):
@@ -50,7 +51,6 @@ class TranslationFile(object):
         if self._incomplete_translations is None:
             self._collect_translations()
         return self._incomplete_translations
-
 
     ### PRIVATE METHODS ###
 
@@ -97,9 +97,9 @@ class TranslationFile(object):
                 key = translation_match.group(constants.KEY_KEY)
                 translation = translation_match.group(constants.TRANSLATION_KEY)
                 translations.add(Translation(language_code=self.language_code,
-                                       comment=comment,
-                                       key=key,
-                                       translation=translation))
+                                             comment=comment,
+                                             key=key,
+                                             translation=translation))
                 comment = None
             elif incomplete_translation_match is not None:
                 num_of_incomplete_translations += 1
@@ -134,6 +134,26 @@ class TranslationFile(object):
         self._translations = translations
         self._incomplete_translations = incomplete_translations
 
+    def _create_backup_file(self):
+        now = datetime.datetime.now()
+        now_string = now.strftime("%d%m%Y_%Hh%Mm%Ss")
+        path_wo_ext = os.path.splitext(self.file_path)[0]
+        backup_file_path = (path_wo_ext + '_' + now_string + '.bak')
+        i = 2
+        while os.path.exists(backup_file_path):
+            backup_file_path = (path_wo_ext + '_' + now_string + str(i) + '_' + '.bak')
+            i += 1
+
+        logging.info('Creating backup of file {file_} for language-code {language_code} => {backup_file}'
+                     ''.format(file_=os.path.basename(self.file_path),
+                               language_code=self.language_code,
+                               backup_file=os.path.basename(backup_file_path)))
+
+        logging.debug('Full backup-file-path: {file_path}'
+                      ''.format(file_path=os.path.abspath(backup_file_path)))
+
+        shutil.copy(self.file_path, backup_file_path)
+
     ### PUBLIC METHODS ###
 
     def has_translation_for_localized_string(self, localized_string):
@@ -162,26 +182,19 @@ class TranslationFile(object):
         self._incomplete_translations.add(incomplete_translation)
 
     def write_file(self):
+        """
+        Creates a backup-file and writes all translations back to its file-path.
+        """
+        self._create_backup_file()
+
         logging.info('Writing translations of language_code {language_code} to file {file_}'
                      ''.format(language_code=self.language_code,
                                file_=os.path.basename(self.file_path)))
 
-    def create_backup_file(self):
-        now = datetime.datetime.now()
-        now_string = now.strftime("%d%m%Y_%Hh%Mm%Ss")
-        path_wo_ext = os.path.splitext(self.file_path)[0]
-        backup_file_path = (path_wo_ext + '_' + now_string + '.bak')
-        i = 2
-        while os.path.exists(backup_file_path):
-            backup_file_path = (path_wo_ext + '_' + now_string + str(i) + '_' + '.bak')
-            i += 1
+        all_translations = list(self.translations) + list(self.incomplete_translations)
+        sorted_translations = sorted(all_translations, key=lambda trans:(num_of_words_in_string(trans.key), trans.key))
 
-        logging.info('Creating backup of file {file_} for language-code {language_code} => {backup_file}'
-                     ''.format(file_=os.path.basename(self.file_path),
-                               language_code=self.language_code,
-                               backup_file=os.path.basename(backup_file_path)))
-
-        logging.debug('Full backup-file-path: {file_path}'
-                      ''.format(file_path=os.path.abspath(backup_file_path)))
-
-        shutil.copy (self.file_path, backup_file_path)
+        with open(self.file_path, mode='w') as outfile:
+            stringified_translations = [str(trans) for trans in sorted_translations]
+            content = '\n'.join(stringified_translations)
+            outfile.write(content)

@@ -28,12 +28,21 @@ class Translation(object):
 
     def __str__(self):
         result = ''
-        if self.comment is not None:
-            result += self.comment + '\n'
+        has_comment = self.comment is not None
+        if has_comment:
+            result += '\n' + self.comment + '\n'
         result += ('"{key}" = "{translation}";'
                    ''.format(key=self.key,
                              translation=self.translation))
+        if has_comment:
+            result += '\n'
         return result
+
+    def __hash__(self):
+        return (hash(self.language_code) ^
+                hash(self.comment) ^
+                hash(self.key) ^
+                hash(self.translation))
 
     ### PROPERTIES ###
 

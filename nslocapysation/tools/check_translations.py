@@ -28,11 +28,15 @@ def check_translations(translation_files, localized_strings, update=False, ignor
     :type translation_files: set[TranslationFile]
     :type localized_strings: set[LocalizedString]
     """
+    files_to_write = []
+
     for file_ in translation_files:
         if file_.language_code in ignore_language_codes:
             logging.info("Ignoring language-code '{language_code}'"
                          "".format(language_code=file_.language_code))
             continue
+        else:
+            files_to_write.append(file_)
 
         missing_translation_strings = []
         for loc_string in localized_strings:
@@ -55,6 +59,5 @@ def check_translations(translation_files, localized_strings, update=False, ignor
                     file_.add_incomplete_translation(inc_trans)
 
     if update:
-        for file_ in translation_files:
-            file_.create_backup_file()
+        for file_ in files_to_write:
             file_.write_file()
