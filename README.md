@@ -6,7 +6,7 @@ Replacing the good ol' genstrings-command with an actually useful python-module.
 This module checks for usages of 'NSLocalizedString(@"key", @"comment")' (and possible custom macros, I use NSL(@"key"), for example) in your project's code, reads your Localizable.strings files and checks for missing translations.
 
 Per default, it runs in dry-mode and only logs warnings for missing translations.
-If you set the update-flag (-u), it writes the keys ('"key" = ') of missing translations to the strings-files,
+If you set the update-flag (-u), it writes the keys ('"key" = ', without translation and the semicolon) of missing translations to the strings-files,
 so you get a compile-error when trying to build in Xcode. This will prevent you from releasing an App with missing translations.
 
 It does not overwrite your existing translations. Instead, it orders them by word-count and by alphabet, so it merges
