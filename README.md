@@ -31,3 +31,5 @@ Known Issues / Improvement Ideas
   meant for a whole group being ripped away from the group. Instead, it is then glued to the first translation of the   group. 
 - It's not yet possible to ignore folders or files, so one has to be sure to select the correct root.
 - Right now, only '//'-comments are recognized, '/\*\*/'-comments get lost atm :/ 
+- It's not possible to ignore certain words in certain languages, like 'OK', which is for example the same in
+  german and in english (and most likely in many other languages)
