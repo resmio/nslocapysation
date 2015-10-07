@@ -6,7 +6,7 @@ import shutil
 import datetime
 import logging
 from nslocapysation import constants
-from nslocapysation.classes.Translationold import Translation
+from nslocapysation.classes.translation import Translation
 from nslocapysation.classes.incomplete_translation import IncompleteTranslation
 
 
