@@ -5,7 +5,9 @@ import os
 import shutil
 import datetime
 import logging
+import itertools
 from nslocapysation import constants
+from nslocapysation.utils.n_                        import n_
 from nslocapysation.utils.num_of_words_in_string    import num_of_words_in_string
 from nslocapysation.classes.translation             import Translation
 from nslocapysation.classes.incomplete_translation  import IncompleteTranslation
@@ -182,9 +184,17 @@ class TranslationFile(object):
                                file_=os.path.basename(self.file_path)))
 
         all_translations = list(self.translations) + list(self.incomplete_translations)
-        sorted_translations = sorted(all_translations, key=lambda trans:(num_of_words_in_string(trans.key), trans.key))
+        sorted_translations = sorted(all_translations,
+                                     key=lambda trans:(num_of_words_in_string(trans.key), trans.key.lower()))
 
+        stringified_translations = []
+        for length, group in itertools.groupby(sorted_translations,
+                                               key=lambda trans:num_of_words_in_string(trans.key)):
+            stringified_translations.append('\n/* {num} {n_words} */'
+                                            ''.format(num=length,
+                                                      n_words=n_(length, 'word')))
+            stringified_translations += [str(trans) for trans in group]
+
+        content = '\n'.join(stringified_translations)
         with open(self.file_path, mode='w') as outfile:
-            stringified_translations = [str(trans) for trans in sorted_translations]
-            content = '\n'.join(stringified_translations)
             outfile.write(content)

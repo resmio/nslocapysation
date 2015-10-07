@@ -1,6 +1,5 @@
 __author__ = 'JanNash'
 
-import os
 import logging
 from nslocapysation.classes.localized_string            import LocalizedString
 from nslocapysation.classes.dynamic_localized_string    import DynamicLocalizedString
