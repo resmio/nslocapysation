@@ -19,7 +19,7 @@ class LocalizedString(object):
 
         self._macro = macro
         self._strng = strng
-        self._comment = comment
+        self._comment = comment if comment != 'nil' else None
         self._full_sourcefile_path = full_sourcefile_path
         self._sourcefile_line_number = sourcefile_line_number
         self._line_occurrence_number = line_occurrence_number
