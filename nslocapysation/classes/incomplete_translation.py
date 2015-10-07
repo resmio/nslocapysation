@@ -1,6 +1,6 @@
 __author__ = 'JanNash'
 
-from nslocapysation.classes.translation import Translation
+from nslocapysation.classes.Translation import Translation
 
 
 class IncompleteTranslation(Translation):
