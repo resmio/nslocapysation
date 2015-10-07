@@ -40,7 +40,6 @@ class Translation(object):
 
     def __hash__(self):
         return (hash(self.language_code) ^
-                hash(self.comment) ^
                 hash(self.key) ^
                 hash(self.translation))
 
