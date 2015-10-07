@@ -44,6 +44,16 @@ class Translation(object):
                 hash(self.key) ^
                 hash(self.translation))
 
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return (self.language_code == other.language_code and
+                self.key == other.key and
+                self.translation == other.translation)
+
+    def __ne__(self, other):
+        return not self.__eq__(other=other)
+
     ### PROPERTIES ###
 
     @property
