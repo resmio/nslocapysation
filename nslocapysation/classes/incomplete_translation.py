@@ -15,7 +15,8 @@ class IncompleteTranslation(Translation):
         super(IncompleteTranslation, self).__init__(language_code=language_code,
                                                     comment=comment,
                                                     key=key,
-                                                    translation=None)
+                                                    translation='')
+        self._translation = None
 
     ### MAGIC ###
 

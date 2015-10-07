@@ -121,15 +121,15 @@ class TranslationFile(object):
         logging.info('Found {num} comments.'
                      ''.format(num=num_of_comments))
         logging.debug('Comments: {comments}'
-                      ''.format(comments=[trans.comment for trans in translations]))
+                      ''.format(comments=[trans.comment for trans in translations if trans.comment is not None]))
         logging.info('Found {num} translations.'
                      ''.format(num=num_of_translations))
         logging.debug('Translations: {translations}'
-                      ''.format(translations=[(trans.key, trans.translation) for trans in translations]))
+                      ''.format(translations=[str(trans) for trans in translations]))
         logging.info('Found {num} incomplete translations.'
-                     ''.format(num=num_of_translations))
+                     ''.format(num=num_of_incomplete_translations))
         logging.debug('Incomplete translations: {translations}'
-                      ''.format(translations=[(trans.key, trans.translation) for trans in incomplete_translations]))
+                      ''.format(translations=[str(trans) for trans in incomplete_translations]))
 
         self._translations = translations
         self._incomplete_translations = incomplete_translations
@@ -141,7 +141,10 @@ class TranslationFile(object):
         Checks if a localized string has a translation in this file
 
         :param localized_string: The localized string to search for.
-        :return:
+        :returns: True if there is a complete translation for the string.
+
+        :type localized_string: LocalizedString
+        :rtype: bool
         """
         for translation in self.translations:
             if translation.key == localized_string.key:
@@ -149,26 +152,36 @@ class TranslationFile(object):
         return False
 
     def add_incomplete_translation(self, incomplete_translation):
-        return
+        """
+        Adds an instance of IncompleteTranslation to the files incomplete translations.
+
+        :param incomplete_translation: The incomplete translation to add.
+
+        :type incomplete_translation: IncompleteTranslation
+        """
+        self._incomplete_translations.add(incomplete_translation)
 
     def write_file(self):
         logging.info('Writing translations of language_code {language_code} to file {file_}'
                      ''.format(language_code=self.language_code,
                                file_=os.path.basename(self.file_path)))
-        pass
 
     def create_backup_file(self):
         now = datetime.datetime.now()
-        now_string = now.strftime("%d%m%Y_%H-%M")
+        now_string = now.strftime("%d%m%Y_%Hh%Mm%Ss")
         path_wo_ext = os.path.splitext(self.file_path)[0]
-        backup_file_path = os.path.join(path_wo_ext, '_' + now_string + '.bak')
+        backup_file_path = (path_wo_ext + '_' + now_string + '.bak')
         i = 2
         while os.path.exists(backup_file_path):
-            backup_file_path = os.path.join(path_wo_ext, '_' + now_string + str(i) + '.bak')
+            backup_file_path = (path_wo_ext + '_' + now_string + str(i) + '_' + '.bak')
             i += 1
 
-        logging.info('Creating backup of file {file_} => {backup_file}'
+        logging.info('Creating backup of file {file_} for language-code {language_code} => {backup_file}'
                      ''.format(file_=os.path.basename(self.file_path),
+                               language_code=self.language_code,
                                backup_file=os.path.basename(backup_file_path)))
+
+        logging.debug('Full backup-file-path: {file_path}'
+                      ''.format(file_path=os.path.abspath(backup_file_path)))
 
         shutil.copy (self.file_path, backup_file_path)

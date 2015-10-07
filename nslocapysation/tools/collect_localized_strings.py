@@ -7,6 +7,7 @@ from nslocapysation.classes.dynamic_localized_string import DynamicLocalizedStri
 from nslocapysation.classes.localized_string import LocalizedString
 from nslocapysation.classes.ns_localized_string_macro import NSLocalizedStringMacro
 from nslocapysation.utils.is_literal_NSString import is_literal_NSString
+from nslocapysation.utils.n_ import n_
 
 
 DEFAULT_MACRO = NSLocalizedStringMacro(format_='NSLocalizedString(@"key", @"comment")')
@@ -27,15 +28,11 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
     :type custom_macros: list[NSLocalizedStringMacro]
     :rtype: set[LocalizedString]
     """
-
-    def n_(num, strng):
-        return strng if num == 1 else strng + 's'
-
     result = set()
 
     macros = [DEFAULT_MACRO] + list(custom_macros)
 
-    logging.info('Searching for the following macros: {macros}'
+    logging.info('Searching for macros: {macros}'
                  ''.format(macros=", ".join(str(macro) for macro in macros)))
 
     occurrence_counts = {macro: 0 for macro in macros}
@@ -80,7 +77,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
                     if not is_literal_NSString(key):
                         logging.warning('Attention, there seems to be a dynamic usage of {macro} in file {file_}, '
-                                        'line {line_number}, occurrence number {occurrence_number}!\n'
+                                        'line {line_number}, occurrence number {occurrence_number}! '
                                         'Please check manually that every possible value of the supplied variable '
                                         '"{variable}" has sufficient localizations!'
                                         ''.format(macro=macro,
@@ -90,14 +87,14 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                                                   variable=key))
 
                         localizedString = DynamicLocalizedString(macro=macro,
-                                                                 key=key,
+                                                                 strng=key,
                                                                  comment=comment,
                                                                  full_sourcefile_path=file_path,
                                                                  sourcefile_line_number=line_number,
                                                                  line_occurrence_number=occurrence_number)
                     else:
                         localizedString = LocalizedString(macro=macro,
-                                                          key=key,
+                                                          strng=key,
                                                           comment=comment,
                                                           full_sourcefile_path=file_path,
                                                           sourcefile_line_number=line_number,

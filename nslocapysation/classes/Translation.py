@@ -50,6 +50,10 @@ class Translation(object):
         return self._key
 
     @property
+    def key_without_at(self):
+        return self.key[1:]
+
+    @property
     def translation(self):
         return self._translation
 

@@ -5,9 +5,10 @@ import logging
 from nslocapysation.classes.localized_string import LocalizedString
 from nslocapysation.classes.incomplete_translation import IncompleteTranslation
 from nslocapysation.classes.translation_file import TranslationFile
+from nslocapysation.utils.n_ import n_
 
 
-def check_localizations(translation_files, localized_strings, update=False):
+def check_translations(translation_files, localized_strings, update=False, ignore_language_codes=()):
     """
     This function checks for each localized-string if it has a translation in every language.
     If a translation is missing, it logs a warning.
@@ -28,15 +29,29 @@ def check_localizations(translation_files, localized_strings, update=False):
     :type localized_strings: set[LocalizedString]
     """
     for file_ in translation_files:
+        if file_.language_code in ignore_language_codes:
+            logging.info("Ignoring language-code '{language_code}'"
+                         "".format(language_code=file_.language_code))
+            continue
+
+        missing_translation_strings = []
         for loc_string in localized_strings:
             if not file_.has_translation_for_localized_string(loc_string):
-                logging.warning("File {file_} missing translation for key '{key}'!"
-                                "".format(file_=os.path.basename(file_.file_path),
-                                          key=loc_string.key))
-                if update:
+                missing_translation_strings.append(loc_string)
+
+        if missing_translation_strings:
+            n_translation = n_(len(missing_translation_strings), 'translation')
+            n_key = n_(len(missing_translation_strings), 'key')
+            logging.warning("Language '{lan_code}' missing {n_translation} for {n_key} {keys}!"
+                                "".format(lan_code=file_.language_code,
+                                          n_translation=n_translation,
+                                          n_key=n_key,
+                                          keys=[strng.key for strng in missing_translation_strings]))
+            if update:
+                for strng in missing_translation_strings:
                     inc_trans = IncompleteTranslation(language_code=file_.language_code,
-                                                                   comment=loc_string.comment,
-                                                                   key=loc_string.key)
+                                                      comment=strng.comment,
+                                                      key=strng.key)
                     file_.add_incomplete_translation(inc_trans)
 
     if update:

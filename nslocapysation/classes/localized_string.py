@@ -10,7 +10,7 @@ class LocalizedString(object):
     ### INITIALIZER ###
     def __init__(self,
                  macro=None,
-                 key="",
+                 strng="",
                  comment=None,
                  translations=None,
                  full_sourcefile_path="",
@@ -18,7 +18,7 @@ class LocalizedString(object):
                  line_occurrence_number=None):
 
         self._macro = macro
-        self._key = key
+        self._strng = strng
         self._comment = comment
         self._full_sourcefile_path = full_sourcefile_path
         self._sourcefile_line_number = sourcefile_line_number
@@ -29,7 +29,7 @@ class LocalizedString(object):
     def __repr__(self):
         return ("[{class_name}]\n"
                 "    macro:                     {macro}\n"
-                "    key:                       {key}\n"
+                "    strng:                     {strng}\n"
                 "    comment:                   {comment}\n"
                 "    sourcefile_name:           {sourcefile_name}\n"
                 "    sourcefile_line_number:    {sourcefile_line_number}\n"
@@ -37,7 +37,7 @@ class LocalizedString(object):
                 "    full_sourcefile_path:      {full_sourcefile_path}\n"
                 "".format(class_name=self.__class__.__name__,
                           macro=self.macro,
-                          key=self.key,
+                          strng=self.strng,
                           comment=self.comment,
                           sourcefile_name=self.sourcefile_name,
                           sourcefile_line_number=self.sourcefile_line_number,
@@ -71,8 +71,13 @@ class LocalizedString(object):
         return self._macro
 
     @property
+    def strng(self):
+        return self._strng
+
+    @property
     def key(self):
-        return self._key
+        # Without the @""
+        return self.strng[2:-1]
 
     @property
     def comment(self):

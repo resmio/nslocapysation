@@ -40,6 +40,13 @@ def parse_args():
               "see documentation of nslocapysation.classes.localized_string.LocalizedString")
     )
 
+    parser.add_argument(
+        '-i', '--ignore',
+        action='store', nargs='*', dest='ignore_language_codes',
+        help=("Language codes for which missing translations should be disregarded."
+              "This is useful if you are lazy and use the UI-string of that language as key.")
+    )
+
     return parser.parse_args()
 
 
@@ -49,7 +56,7 @@ def main(cmd_args):
     from nslocapysation.tools.collect_m_file_and_lproj_dir_paths    import collect_m_file_and_lproj_dir_paths
     from nslocapysation.tools.collect_localized_strings             import collect_localized_strings
     from nslocapysation.tools.collect_localizable_strings_files     import collect_localizable_strings_files
-    from nslocapysation.tools.check_localizations                   import check_localizations
+    from nslocapysation.tools.check_translations                    import check_translations
     from nslocapysation.classes.ns_localized_string_macro           import NSLocalizedStringMacro
 
     if cmd_args.debug:
@@ -70,10 +77,10 @@ def main(cmd_args):
 
     localizable_strings_files = collect_localizable_strings_files(localization_dir_paths=localization_file_paths)
 
-    check_localizations(translation_files=localizable_strings_files,
-                        localized_strings=localized_strings,
-                        update=cmd_args.update)
-
+    check_translations(translation_files=localizable_strings_files,
+                       localized_strings=localized_strings,
+                       update=cmd_args.update,
+                       ignore_language_codes=cmd_args.ignore_language_codes)
 
 if __name__ == '__main__':
     cmd_args = parse_args()
