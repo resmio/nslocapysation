@@ -88,11 +88,6 @@ class TranslationFile(object):
 
                 if comment is not None:
                     num_of_comments += 1
-                    logging.debug('Found comment: {comment}'
-                                  ''.format(comment=comment))
-
-                logging.debug('Found translation: {translation}'
-                              ''.format(translation=translation_match.group()))
 
                 key = translation_match.group(constants.KEY_KEY)
                 translation = translation_match.group(constants.TRANSLATION_KEY)
@@ -106,11 +101,6 @@ class TranslationFile(object):
 
                 if comment is not None:
                     num_of_comments += 1
-                    logging.debug('Found comment: {comment}'
-                                  ''.format(comment=comment))
-
-                logging.debug('Found incomplete translation: {translation}'
-                              ''.format(translation=incomplete_translation_match.group()))
 
                 key = incomplete_translation_match.group(constants.KEY_KEY)
                 incomplete_translations.add(IncompleteTranslation(language_code=self.language_code,

@@ -2,9 +2,10 @@ __author__ = 'JanNash'
 
 import os
 import logging
-from nslocapysation.classes.localized_string import LocalizedString
-from nslocapysation.classes.incomplete_translation import IncompleteTranslation
-from nslocapysation.classes.translation_file import TranslationFile
+from nslocapysation.classes.localized_string            import LocalizedString
+from nslocapysation.classes.dynamic_localized_string    import DynamicLocalizedString
+from nslocapysation.classes.incomplete_translation      import IncompleteTranslation
+from nslocapysation.classes.translation_file            import TranslationFile
 from nslocapysation.utils.n_ import n_
 
 
@@ -40,8 +41,9 @@ def check_translations(translation_files, localized_strings, update=False, ignor
 
         missing_translation_strings = []
         for loc_string in localized_strings:
-            if not file_.has_translation_for_localized_string(loc_string):
-                missing_translation_strings.append(loc_string)
+            if not isinstance(loc_string, DynamicLocalizedString):
+                if not file_.has_translation_for_localized_string(loc_string):
+                    missing_translation_strings.append(loc_string)
 
         if missing_translation_strings:
             n_translation = n_(len(missing_translation_strings), 'translation')
