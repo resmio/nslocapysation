@@ -38,6 +38,8 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
     for file_path in implementation_file_paths:
 
+        is_objc_file = file_path[-2:] == '.m'
+
         file_result = set()
         occurrences_in_file = {}
 
@@ -55,7 +57,8 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
             line_number = line_index + 1
 
             for macro in macros:
-                matches = re.findall(macro.get_regex(), line)
+                rgx = macro.get_regex(is_objc_file=is_objc_file)
+                matches = re.findall(rgx, line)
 
                 if not matches:
                     continue

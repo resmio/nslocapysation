@@ -114,8 +114,11 @@ class TranslationFile(object):
                       ''.format(comments=[trans.comment for trans in translations if trans.comment is not None]))
         logging.info('Found {num} translations.'
                      ''.format(num=num_of_translations))
-        logging.debug('Translations: {translations}'
-                      ''.format(translations=[str(trans) for trans in translations]))
+
+        logging.debug('Translations:')
+        for translation in translations:
+            logging.debug('    {transl}'
+                          ''.format(transl=translation))
 
         if num_of_incomplete_translations > 0:
             logging.warning('Found {num} incomplete translations.'
