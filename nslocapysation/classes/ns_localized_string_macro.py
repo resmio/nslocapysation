@@ -44,13 +44,23 @@ class NSLocalizedStringMacro(object):
     # METHODS #
 
     def get_regex(self, is_objc_file):
-        key_ = r'\@\"key\"' if is_objc_file else r'\"key\"'
+        objc_key = r'\@\"key\"'
+        swift_key = r'\"key\"'
+        replacer = r'(.*\(*\)*?)'
+
+        key_ = objc_key if is_objc_file else swift_key
 
         # Escape all metas
         escaped_format = re.escape(self.format_)
-        regex_string = escaped_format.replace(key_, r'(.*?)')
+
+        regex_string = escaped_format.replace(key_, replacer)
+
+        print(regex_string)
 
         if self.has_comment:
-            comment_ = r'\@\"comment\"' if is_objc_file else r'\"comment\"'
-            regex_string = regex_string.replace(comment_, r'(.*?)')
+            objc_comment = r'\@\"comment\"'
+            swift_comment = r'\"comment\"'
+
+            comment_ = objc_comment if is_objc_file else swift_comment
+            regex_string = regex_string.replace(comment_, replacer)
         return re.compile(regex_string)
