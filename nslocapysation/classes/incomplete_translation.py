@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 from nslocapysation.classes.translation import Translation
 
 
@@ -9,7 +7,7 @@ class IncompleteTranslation(Translation):
     When main.py is ran with --update set, those will be stringified and written to the .strings-files,
     which will then lead to a compile-error in Xcode, so you don't accidentally ship an App that's missing translations.
     """
-    ### INITIALIZER ###
+    # INITIALIZER #
 
     def __init__(self, language_code, comment, key):
         super(IncompleteTranslation, self).__init__(language_code=language_code,
@@ -18,7 +16,7 @@ class IncompleteTranslation(Translation):
                                                     translation='')
         self._translation = None
 
-    ### MAGIC ###
+    # MAGIC #
 
     def __str__(self):
         result = ''

@@ -1,4 +1,3 @@
-__author__ = 'JanNash'
 
 
 def n_(num, strng):

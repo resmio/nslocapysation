@@ -1,4 +1,3 @@
-__author__ = 'JanNash'
 
 
 def num_of_words_in_string(strng):

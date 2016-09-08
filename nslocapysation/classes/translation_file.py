@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 import re
 import os
 import shutil
@@ -7,23 +5,23 @@ import datetime
 import logging
 import itertools
 from nslocapysation import constants
-from nslocapysation.utils.n_                        import n_
-from nslocapysation.utils.num_of_words_in_string    import num_of_words_in_string
-from nslocapysation.classes.translation             import Translation
-from nslocapysation.classes.incomplete_translation  import IncompleteTranslation
+from nslocapysation.utils.n_ import n_
+from nslocapysation.utils.num_of_words_in_string import num_of_words_in_string
+from nslocapysation.classes.translation import Translation
+from nslocapysation.classes.incomplete_translation import IncompleteTranslation
 
 
 class TranslationFile(object):
     """
     A class whose instances represent .strings-localizable-string-files.
     """
-    ### CLASS CONSTANTS ###
+    # CLASS CONSTANTS #
 
-    RE_COMMENT = re.compile(r'\/\/(?P<comment>.*)')
-    RE_TRANSLATION = re.compile(r'\"(?P<key>.*?)\"\s*\=\s*\"(?P<translation>.*?)\"\;')
-    RE_INCOMPLETE_TRANSLATION = re.compile(r'\"(?P<key>.*?)\"\s*\=\s*\Z')
+    RE_COMMENT = re.compile(r'//(?P<comment>.*)')
+    RE_TRANSLATION = re.compile(r'"(?P<key>.*?)"s*=s*"(?P<translation>.*?)";')
+    RE_INCOMPLETE_TRANSLATION = re.compile(r'"(?P<key>.*?)"s*=s*Z')
 
-    ### INITIALIZER ###
+    # INITIALIZER #
 
     def __init__(self, language_code, file_path):
         self._language_code = language_code
@@ -32,7 +30,7 @@ class TranslationFile(object):
         self._translations = None
         self._incomplete_translations = None
 
-    ### PROPERTIES ###
+    # PROPERTIES #
 
     @property
     def language_code(self):
@@ -54,7 +52,7 @@ class TranslationFile(object):
             self._collect_translations()
         return self._incomplete_translations
 
-    ### PRIVATE METHODS ###
+    # PRIVATE METHODS #
 
     def _collect_translations(self):
         translations = set()
@@ -128,7 +126,7 @@ class TranslationFile(object):
 
     def _create_backup_file(self):
         now = datetime.datetime.now()
-        now_string = now.strftime("%d%m%Y_%Hh%Mm%Ss")
+        now_string = now.strftime('%d%m%Y_%Hh%Mm%Ss')
         path_wo_ext = os.path.splitext(self.file_path)[0]
         backup_file_path = (path_wo_ext + '_' + now_string + '.bak')
         i = 2
@@ -146,7 +144,7 @@ class TranslationFile(object):
 
         shutil.copy(self.file_path, backup_file_path)
 
-    ### PUBLIC METHODS ###
+    # PUBLIC METHODS #
 
     def has_translation_for_localized_string(self, localized_string):
         """
@@ -184,12 +182,22 @@ class TranslationFile(object):
                                file_=os.path.basename(self.file_path)))
 
         all_translations = list(self.translations) + list(self.incomplete_translations)
-        sorted_translations = sorted(all_translations,
-                                     key=lambda trans:(num_of_words_in_string(trans.key), trans.key.lower()))
+
+        def sorting_func(translation):
+            return num_of_words_in_string(translation.key), translation.key.lower()
+
+        sorted_translations = sorted(
+            all_translations,
+            key=sorting_func)
 
         stringified_translations = []
-        for length, group in itertools.groupby(sorted_translations,
-                                               key=lambda trans:num_of_words_in_string(trans.key)):
+
+        def grouping_func(translation):
+            return num_of_words_in_string(translation.key)
+
+        for length, group in itertools.groupby(
+                sorted_translations,
+                key=grouping_func):
             stringified_translations.append('\n/* {num} {n_words} */'
                                             ''.format(num=length,
                                                       n_words=n_(length, 'word')))

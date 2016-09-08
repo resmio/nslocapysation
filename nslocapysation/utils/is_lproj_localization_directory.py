@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 import os
 from nslocapysation import constants
 

@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 import os
 from nslocapysation import constants
 from nslocapysation.classes.translation_file import TranslationFile
@@ -22,6 +20,8 @@ def collect_localizable_strings_files(localization_dir_paths):
     for dir_path in localization_dir_paths:
         strings_file_path = os.path.join(dir_path, constants.LOCALIZABLE_STRINGS_FILE_NAME)
         language_code = get_language_code_from_file_path(strings_file_path)
-        result.add(TranslationFile(language_code=language_code,
-                                         file_path=strings_file_path))
+        result.add(
+            TranslationFile(
+                language_code=language_code,
+                file_path=strings_file_path))
     return result

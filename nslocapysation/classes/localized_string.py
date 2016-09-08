@@ -1,19 +1,18 @@
-__author__ = 'JanNash'
-
 import os
 
 
 class LocalizedString(object):
     """
-    A class whose instances represent occurrences of 'NSLocalizedString()' (or custom macros, like 'NSL()').
+    A class whose instances represent occurrences of 'NSLocalizedString()'
+    (or custom macros, like 'NSL()').
     """
-    ### INITIALIZER ###
+    # INITIALIZER #
+
     def __init__(self,
                  macro=None,
-                 strng="",
+                 strng='',
                  comment=None,
-                 translations=None,
-                 full_sourcefile_path="",
+                 full_sourcefile_path='',
                  sourcefile_line_number=None,
                  line_occurrence_number=None):
 
@@ -24,18 +23,18 @@ class LocalizedString(object):
         self._sourcefile_line_number = sourcefile_line_number
         self._line_occurrence_number = line_occurrence_number
 
-    ### MAGIC ###
+    # MAGIC #
 
     def __repr__(self):
-        return ("[{class_name}]\n"
-                "    macro:                     {macro}\n"
-                "    strng:                     {strng}\n"
-                "    comment:                   {comment}\n"
-                "    sourcefile_name:           {sourcefile_name}\n"
-                "    sourcefile_line_number:    {sourcefile_line_number}\n"
-                "    line_occurrence_number:    {line_occurrence_number}\n"
-                "    full_sourcefile_path:      {full_sourcefile_path}\n"
-                "".format(class_name=self.__class__.__name__,
+        return ('[{class_name}]\n'
+                '    macro:                     {macro}\n'
+                '    strng:                     {strng}\n'
+                '    comment:                   {comment}\n'
+                '    sourcefile_name:           {sourcefile_name}\n'
+                '    sourcefile_line_number:    {sourcefile_line_number}\n'
+                '    line_occurrence_number:    {line_occurrence_number}\n'
+                '    full_sourcefile_path:      {full_sourcefile_path}\n'
+                ''.format(class_name=self.__class__.__name__,
                           macro=self.macro,
                           strng=self.strng,
                           comment=self.comment,
@@ -64,7 +63,7 @@ class LocalizedString(object):
     def __hash__(self):
         return hash(self.key)
 
-    ### PROPERTIES ###
+    # PROPERTIES #
 
     @property
     def macro(self):
@@ -76,8 +75,11 @@ class LocalizedString(object):
 
     @property
     def key(self):
-        # Without the @""
-        return self.strng[2:-1]
+        # Without the @"" / ""
+        if self._is_objc_string:
+            return self.strng[2:-1]
+        elif self._is_swift_string:
+            return self.strng[1:-1]
 
     @property
     def comment(self):
@@ -105,3 +107,13 @@ class LocalizedString(object):
     @property
     def full_sourcefile_path(self):
         return self._full_sourcefile_path
+
+    # PRIVATE PROPERTIES #
+
+    @property
+    def _is_objc_string(self):
+        return self.strng[0] == '@'
+
+    @property
+    def _is_swift_string(self):
+        return self.strng[0] == '"'

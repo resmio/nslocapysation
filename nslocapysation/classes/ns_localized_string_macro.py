@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 import re
 
 
@@ -9,31 +7,31 @@ class NSLocalizedStringMacro(object):
     This given format must include 'key' and can optionally contain 'comment'.
     The class the provides a compiled regex that can be used to search files.
     """
-    ### CLASS CONSTANTS ###
+    # CLASS CONSTANTS #
 
     KEY_FORMAT = r'key'
     COMMENT_FORMAT = r'comment'
 
-    ### INITIALIZER ###
+    # INITIALIZER #
 
     def __init__(self, format_):
 
         if format_.find(self.KEY_FORMAT) == -1:
             raise ValueError(
-                "Tried to create an instance of NSLocalizedStringMacro with format "
-                "'{format_}', which is missing KEY_FORMAT '{key_format}'!"
-                "".format(format_=format_, key_format=self.KEY_FORMAT)
+                'Tried to create an instance of NSLocalizedStringMacro with format '
+                '"{format_}", which is missing KEY_FORMAT "{key_format}"!'
+                ''.format(format_=format_, key_format=self.KEY_FORMAT)
             )
 
         self._format_ = format_
         self._regex = None
 
-    ### MAGIC ###
+    # MAGIC #
 
     def __repr__(self):
-        return "'{}'".format(self.format_)
+        return '"{}"'.format(self.format_)
 
-    ### READONLY PROPERTIES ###
+    # READONLY PROPERTIES #
 
     @property
     def format_(self):
@@ -43,9 +41,9 @@ class NSLocalizedStringMacro(object):
     def has_comment(self):
         return self.format_.find(self.COMMENT_FORMAT) != -1
 
-    ### METHODS ###
+    # METHODS #
 
-    def getRegex(self):
+    def get_regex(self):
         # Escape all metas
         escaped_format = re.escape(self.format_)
         regex_string = escaped_format.replace(r'\@\"key\"', r'(.*?)')

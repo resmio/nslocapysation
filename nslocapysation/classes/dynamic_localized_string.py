@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 from nslocapysation.classes.localized_string import LocalizedString
 
 

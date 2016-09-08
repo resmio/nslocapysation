@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 import re
 
 

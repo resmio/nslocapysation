@@ -1,16 +1,15 @@
-__author__ = 'JanNash'
-
 import logging
 import os
 import re
 from nslocapysation.classes.dynamic_localized_string import DynamicLocalizedString
 from nslocapysation.classes.localized_string import LocalizedString
 from nslocapysation.classes.ns_localized_string_macro import NSLocalizedStringMacro
-from nslocapysation.utils.is_literal_NSString import is_literal_NSString
+from nslocapysation.utils.is_literal_string import is_literal_string
 from nslocapysation.utils.n_ import n_
 
 
 DEFAULT_MACRO = NSLocalizedStringMacro(format_='NSLocalizedString(@"key", @"comment")')
+
 
 def collect_localized_strings(implementation_file_paths, custom_macros=()):
     """
@@ -56,7 +55,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
             line_number = line_index + 1
 
             for macro in macros:
-                matches = re.findall(macro.getRegex(), line)
+                matches = re.findall(macro.get_regex(), line)
 
                 if not matches:
                     continue
@@ -74,7 +73,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                         key = match
                         comment = None
 
-                    if not is_literal_NSString(key):
+                    if not is_literal_string(key):
                         logging.warning('Attention, there seems to be a dynamic usage of {macro} in file {file_}, '
                                         'line {line_number}, occurrence number {occurrence_number}! '
                                         'Please check manually that every possible value of the supplied variable '
@@ -85,21 +84,21 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                                                   occurrence_number=occurrence_number,
                                                   variable=key))
 
-                        localizedString = DynamicLocalizedString(macro=macro,
-                                                                 strng=key,
-                                                                 comment=comment,
-                                                                 full_sourcefile_path=file_path,
-                                                                 sourcefile_line_number=line_number,
-                                                                 line_occurrence_number=occurrence_number)
+                        localized_string = DynamicLocalizedString(macro=macro,
+                                                                  strng=key,
+                                                                  comment=comment,
+                                                                  full_sourcefile_path=file_path,
+                                                                  sourcefile_line_number=line_number,
+                                                                  line_occurrence_number=occurrence_number)
                     else:
-                        localizedString = LocalizedString(macro=macro,
-                                                          strng=key,
-                                                          comment=comment,
-                                                          full_sourcefile_path=file_path,
-                                                          sourcefile_line_number=line_number,
-                                                          line_occurrence_number=occurrence_number)
+                        localized_string = LocalizedString(macro=macro,
+                                                           strng=key,
+                                                           comment=comment,
+                                                           full_sourcefile_path=file_path,
+                                                           sourcefile_line_number=line_number,
+                                                           line_occurrence_number=occurrence_number)
 
-                    file_result.add(localizedString)
+                    file_result.add(localized_string)
 
         for macro in macros:
             num_of_occurrences_in_file = occurrences_in_file[macro]
@@ -108,7 +107,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
                               ''.format(num=num_of_occurrences_in_file,
                                         n_occurrence=n_(num_of_occurrences_in_file, 'occurrence'),
                                         macro=macro,
-                                    file_=file_))
+                                        file_=file_))
         if len(file_result):
             logging.debug('Found keys and comments: (key, comment) {keys_and_comments}'
                           ''.format(keys_and_comments=[(strng.key, strng.comment) for strng in file_result]))
@@ -118,9 +117,9 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
     for macro in macros:
         num = occurrence_counts[macro]
         logging.info('Found {num} {n_occurrence} of macro {macro} in total.'
-                      ''.format(num=num,
-                                n_occurrence=n_(num, 'occurrence'),
-                            macro=macro))
+                     ''.format(num=num,
+                               n_occurrence=n_(num, 'occurrence'),
+                               macro=macro))
 
     logging.info('Found {num} distinct localizable {n_string} in total.'
                  ''.format(num=len(result),

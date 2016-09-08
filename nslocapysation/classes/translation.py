@@ -1,5 +1,3 @@
-__author__ = 'JanNash'
-
 
 
 class Translation(object):
@@ -7,7 +5,7 @@ class Translation(object):
     A class whose instances represent complete translations (with optional comments)
     as they can be found in .strings-localization-files.
     """
-    ### INITIALIZER ###
+    # INITIALIZER #
 
     def __init__(self, language_code, comment, key, translation):
 
@@ -24,7 +22,7 @@ class Translation(object):
         self._key = key
         self._translation = translation
 
-    ### MAGIC ###
+    # MAGIC #
 
     def __str__(self):
         result = ''
@@ -53,7 +51,7 @@ class Translation(object):
     def __ne__(self, other):
         return not self.__eq__(other=other)
 
-    ### PROPERTIES ###
+    # PROPERTIES #
 
     @property
     def language_code(self):
