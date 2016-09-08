@@ -52,10 +52,7 @@ class NSLocalizedStringMacro(object):
 
         # Escape all metas
         escaped_format = re.escape(self.format_)
-
         regex_string = escaped_format.replace(key_, replacer)
-
-        print(regex_string)
 
         if self.has_comment:
             objc_comment = r'\@\"comment\"'
