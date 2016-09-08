@@ -211,5 +211,6 @@ class TranslationFile(object):
             stringified_translations += [str(trans) for trans in group]
 
         content = '\n'.join(stringified_translations)
+        content += '\n'
         with open(self.file_path, mode='w') as outfile:
             outfile.write(content)
