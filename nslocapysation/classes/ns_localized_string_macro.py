@@ -9,18 +9,26 @@ class NSLocalizedStringMacro(object):
     """
     # CLASS CONSTANTS #
 
-    KEY_FORMAT = r'key'
-    COMMENT_FORMAT = r'comment'
+    _KEY_FORMAT = r'key'
+    _COMMENT_FORMAT = r'comment'
+
+    _OBJC_KEY = r'\@\"key\"'
+    _SWIFT_KEY = r'\"key\"'
+
+    _OBJC_COMMENT = r'\@\"comment\"'
+    _SWIFT_COMMENT = r'\"comment\"'
+
+    _REPLACER = r'(.*?\W*?)'
 
     # INITIALIZER #
 
     def __init__(self, format_):
 
-        if format_.find(self.KEY_FORMAT) == -1:
+        if format_.find(self._KEY_FORMAT) == -1:
             raise ValueError(
                 'Tried to create an instance of NSLocalizedStringMacro with format '
                 '"{format_}", which is missing KEY_FORMAT "{key_format}"!'
-                ''.format(format_=format_, key_format=self.KEY_FORMAT)
+                ''.format(format_=format_, key_format=self._KEY_FORMAT)
             )
 
         self._format_ = format_
@@ -39,25 +47,19 @@ class NSLocalizedStringMacro(object):
 
     @property
     def has_comment(self):
-        return self.format_.find(self.COMMENT_FORMAT) != -1
+        return self.format_.find(self._COMMENT_FORMAT) != -1
 
     # METHODS #
 
     def get_regex(self, is_objc_file):
-        objc_key = r'\@\"key\"'
-        swift_key = r'\"key\"'
-        replacer = r'(.*\(*\)*?)'
-
-        key_ = objc_key if is_objc_file else swift_key
+        key_ = self._OBJC_KEY if is_objc_file else self._SWIFT_KEY
 
         # Escape all metas
         escaped_format = re.escape(self.format_)
-        regex_string = escaped_format.replace(key_, replacer)
+        regex_string = escaped_format.replace(key_, self._REPLACER)
 
         if self.has_comment:
-            objc_comment = r'\@\"comment\"'
-            swift_comment = r'\"comment\"'
+            comment_ = self._OBJC_COMMENT if is_objc_file else self._SWIFT_COMMENT
+            regex_string = regex_string.replace(comment_, self._REPLACER)
 
-            comment_ = objc_comment if is_objc_file else swift_comment
-            regex_string = regex_string.replace(comment_, replacer)
         return re.compile(regex_string)

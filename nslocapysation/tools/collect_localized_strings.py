@@ -37,8 +37,7 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
     occurrence_counts = {macro: 0 for macro in macros}
 
     for file_path in implementation_file_paths:
-
-        is_objc_file = file_path[-2:] == '.m'
+        is_objc_file = os.path.splitext(file_path)[1] == '.m'
 
         file_result = set()
         occurrences_in_file = {}
