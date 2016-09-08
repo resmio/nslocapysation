@@ -38,7 +38,7 @@ def parse_args():
 
     parser.add_argument(
         '-i', '--ignore',
-        action='store', nargs='*', dest='ignore_language_codes',
+        action='store', nargs='*', dest='ignore_language_codes', default=(),
         help='Language codes for which missing translations should be disregarded.'
              'This is useful if you are lazy and use the UI-string of that language as key.')
 
