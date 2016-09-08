@@ -23,7 +23,7 @@ Usage
 $ python run.py [-ud] [-p project_source_root_path] [-i language_codes_to_ignore] [-c custom_macros]  
 ```
 - -u Update-flag. If set, the keys of the missing translations will be 
-     written to all .strings-files that are not ignored
+     written to all .strings-files that are not ignored by -i
 - -d Debug-flag. Enables debug logging. Beware, this will be quite verbose.
 - -p The path to your project's source-root-folder.
 - -i Language-codes that should be ignored. 
