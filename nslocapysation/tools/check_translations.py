@@ -44,6 +44,10 @@ def check_translations(translation_files, localized_strings, update=False, ignor
                 if not file_.has_translation_for_localized_string(loc_string):
                     missing_translation_strings.append(loc_string)
 
+        logging.warning('Found {n} missing translations for language {lang_code}'
+                        ''.format(n=len(missing_translation_strings),
+                                  lang_code=file_.language_code))
+
         if missing_translation_strings:
             n_translation = n_(len(missing_translation_strings), 'translation')
             n_key = n_(len(missing_translation_strings), 'key')

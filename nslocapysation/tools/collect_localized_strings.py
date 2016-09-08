@@ -75,9 +75,9 @@ def collect_localized_strings(implementation_file_paths, custom_macros=()):
 
                     if not is_literal_string(key):
                         logging.warning('Attention, there seems to be a dynamic usage of {macro} in file {file_}, '
-                                        'line {line_number}, occurrence number {occurrence_number}! '
-                                        'Please check manually that every possible value of the supplied variable '
-                                        '"{variable}" has sufficient localizations!'
+                                        'line {line_number}, occurrence number {occurrence_number}! \n'
+                                        'Please be sure to check manually that every possible value of the '
+                                        'supplied variable "{variable}" has sufficient localizations!'
                                         ''.format(macro=macro,
                                                   file_=file_,
                                                   line_number=line_number,

@@ -17,9 +17,9 @@ class TranslationFile(object):
     """
     # CLASS CONSTANTS #
 
-    RE_COMMENT = re.compile(r'//(?P<comment>.*)')
-    RE_TRANSLATION = re.compile(r'"(?P<key>.*?)"s*=s*"(?P<translation>.*?)";')
-    RE_INCOMPLETE_TRANSLATION = re.compile(r'"(?P<key>.*?)"s*=s*Z')
+    RE_COMMENT = re.compile(r'\/\/(?P<comment>.*)')
+    RE_TRANSLATION = re.compile(r'\"(?P<key>.*?)\"\s*\=\s*\"(?P<translation>.*?)\"\;')
+    RE_INCOMPLETE_TRANSLATION = re.compile(r'\"(?P<key>.*?)\"\s*\=\s*\Z')
 
     # INITIALIZER #
 
@@ -116,10 +116,14 @@ class TranslationFile(object):
                      ''.format(num=num_of_translations))
         logging.debug('Translations: {translations}'
                       ''.format(translations=[str(trans) for trans in translations]))
-        logging.info('Found {num} incomplete translations.'
-                     ''.format(num=num_of_incomplete_translations))
-        logging.debug('Incomplete translations: {translations}'
-                      ''.format(translations=[str(trans) for trans in incomplete_translations]))
+
+        if num_of_incomplete_translations > 0:
+            logging.warning('Found {num} incomplete translations.'
+                            ''.format(num=num_of_incomplete_translations))
+            logging.warning('Incomplete translations: {translations}'
+                            ''.format(translations=[str(trans) for trans in incomplete_translations]))
+        else:
+            logging.info('Found 0 incomplete translations.')
 
         self._translations = translations
         self._incomplete_translations = incomplete_translations

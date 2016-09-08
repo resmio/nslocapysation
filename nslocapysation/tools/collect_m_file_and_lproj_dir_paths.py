@@ -17,7 +17,7 @@ def collect_implementation_file_and_lproj_dir_paths(project_source_root_path):
     :type: str
     :rtype: dict[str, list[str]]
     """
-    logging.info('Searching {project_source_root_path} for .m-/.swift '
+    logging.info('Searching {project_source_root_path} for .m/.swift '
                  'implementation-files and .lproj-localization-directories.'
                  ''.format(project_source_root_path=project_source_root_path))
 
