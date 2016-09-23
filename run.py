@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 __author__ = 'Jan Nash'
 __version__ = "0.2"
 __license__ = "MIT"
@@ -32,7 +34,7 @@ def parse_args():
 
     parser.add_argument(
         '-c', '--custom-macros',
-        action='store', nargs='*', dest='custom_macros',
+        action='store', nargs='*', dest='custom_macros', default=(),
         help='Custom macros that are used in the project. For help regarding the format of those custom macros '
              'see documentation of nslocapysation.classes.localized_string.LocalizedString')
 
